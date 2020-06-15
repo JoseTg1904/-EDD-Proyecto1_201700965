@@ -22,6 +22,8 @@ class Menus{
         void eliminarActivo(Usuario*, string, string);
         void modificarActivo(Usuario*, string, string);
         void rentarActivos(Usuario*, string, string);
+        void activosRentados(Usuario*, string, string);
+        void misActivosRentados(Usuario*, string, string);
         string obtenerID();
 };
 

@@ -20,6 +20,7 @@ class AVL{
         bool buscar(string);
         Activo* modificar(string);
         string retornarActivos();
+        string retornarActivosRentados();
         ListaDobleCircular* devolverActivosDisponibles();
     private:
         NodoA* raiz;
@@ -30,6 +31,7 @@ class AVL{
         void calcularAltura(NodoA*);
         void llenarListaActivos(NodoA*);
         void activosDisponibles(ListaDobleCircular*, NodoA*);
+        void activosRentados(NodoA*);
 };
 
 #endif // AVL_H

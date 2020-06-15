@@ -185,3 +185,26 @@ void AVL::activosDisponibles(ListaDobleCircular* temp, NodoA* aux){
         activosDisponibles(temp, aux->derecha);
     }
 }
+
+string AVL::retornarActivosRentados(){
+    activos = "Activos disponibles:\n";
+    if(this->raiz->activo->getRentado())
+        activos += "ID: " + this->raiz->activo->getID() + " Nombre: " + this->raiz->activo->getNombre() + "\n";
+    activosRentados(this->raiz);
+    return activos;
+}
+
+void AVL::activosRentados(NodoA* aux){
+    if(aux->izquierda != NULL){
+        if(aux->izquierda->activo->getRentado())
+        activos += "ID: " + aux->izquierda->activo->getID() + " Nombre: " +
+                aux->izquierda->activo->getNombre() + "\n";
+        activosRentados(aux->izquierda);
+    }
+    if(aux->derecha !=NULL){
+        if(aux->derecha->activo->getRentado())
+        activos += "ID: " + aux->derecha->activo->getID() + " Nombre: " +
+                aux->derecha->activo->getNombre() + "\n";
+        activosRentados(aux->derecha);
+    }
+}

@@ -185,10 +185,12 @@ void Menus::menuUsuario(Usuario* usuarioActual, string depa, string empresa){
                 modificarActivo(usuarioActual,depa,empresa);
                 break;
             case 4:
+                rentarActivos(usuarioActual,depa,empresa);
                 break;
             case 5:
                 break;
             case 6:
+                misActivosRentados(usuarioActual,depa,empresa);
                 break;
             case 7:
                 menuSesion();
@@ -286,8 +288,13 @@ void Menus::rentarActivos(Usuario* usuario,string depa,string empresa){
     string fecha = to_string(calendario->tm_mday) + "/" + to_string(calendario->tm_mon) + "/" + to_string(calendario->tm_year);
     transacciones->insertar(new Transaccion(obtenerID(),aux->activo->getID(),
                                             usuario->getUsuario(),depa,empresa,fecha,tiempo));
+}
 
-
+void Menus::activosRentados(Usuario* usuario, string depa, string empresa){
 
 }
 
+void Menus::misActivosRentados(Usuario* usuario, string depa, string empresa){
+    string retorno = usuario->getAVL()->retornarActivosRentados();
+    cout << retorno;
+}

@@ -19,3 +19,7 @@ Transaccion::Transaccion(string idTran, string idActivo, string usuario, string 
 string Transaccion::getIdTran(){
     return this->idTran;
 }
+
+string Transaccion::getIdActivo(){
+    return this->idActivo;
+}

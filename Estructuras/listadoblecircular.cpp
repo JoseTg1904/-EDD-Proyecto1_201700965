@@ -21,6 +21,7 @@ NodoL::NodoL(NodoL* siguiente, NodoL* anterior, string cadena){
 ListaDobleCircular::ListaDobleCircular(){
     this->cabeza = NULL;
     this->cola = NULL;
+    this->tamanio = 0;
 }
 
 void ListaDobleCircular::insertar(Transaccion* transaccion){
@@ -29,11 +30,13 @@ void ListaDobleCircular::insertar(Transaccion* transaccion){
         cabeza = cola = nuevo;
         nuevo->siguiente = cabeza;
         nuevo->anterior = cola;
+        this->tamanio++;
     }else{
         NodoL *nuevo = new NodoL(cabeza, cola, transaccion);
         cola->siguiente = nuevo;
         cabeza->anterior = nuevo;
         cola = nuevo;
+        this->tamanio++;
     }
 }
 
@@ -43,11 +46,13 @@ void ListaDobleCircular::insertar(string cadena){
         cabeza = cola = nuevo;
         nuevo->siguiente = cabeza;
         nuevo->anterior = cola;
+        this->tamanio++;
     }else{
         NodoL* nuevo = new NodoL(cabeza, cola, cadena);
         cola->siguiente = nuevo;
         cabeza->anterior = nuevo;
         cola = nuevo;
+        this->tamanio++;
     }
 }
 
@@ -57,11 +62,13 @@ void ListaDobleCircular::insertar(Activo* activo){
         cabeza = cola = nuevo;
         nuevo->siguiente = cabeza;
         nuevo->anterior = cola;
+        this->tamanio++;
     }else{
         NodoL* nuevo = new NodoL(cabeza, cola, activo);
         cola->siguiente = nuevo;
         cabeza->anterior = nuevo;
         cola = nuevo;
+        this->tamanio++;
     }
 }
 
@@ -122,3 +129,28 @@ string ListaDobleCircular::generarID(){
     return salida;
 }
 
+string ListaDobleCircular::eliminar(string id_activo){
+    string retorno;
+    if(this->tamanio == 1){
+        if(this->cabeza->transaccion->getIdActivo() == id_activo){
+            //retornar los datos para cambiar el estado del activo
+            delete this->cabeza;
+            delete this->cola;
+            this->cabeza = this->cola = NULL;
+        }else{
+            retorno = "NULL";
+            return retorno;
+        }
+
+    }else{
+        NodoL* aux = this->cabeza;
+        do {
+            if(aux->transaccion->getIdActivo() == id_activo)
+                break;
+            aux = aux->siguiente;
+        } while (aux!=this->cabeza);
+
+    }
+
+    return retorno;
+}

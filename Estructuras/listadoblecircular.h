@@ -31,10 +31,11 @@ class ListaDobleCircular{
         void insertar(string);
         void insertar(Activo*);
         NodoL* getCabeza();
+        string eliminar(string);
     private:
         NodoL* cabeza;
         NodoL* cola;
-
+        int tamanio;
 };
 
 #endif // LISTADOBLECIRCULAR_H

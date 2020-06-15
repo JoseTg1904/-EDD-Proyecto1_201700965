@@ -8,6 +8,7 @@ class Transaccion{
     public:
         Transaccion(string, string, string, string, string, string, string);
         string getIdTran();
+        string getIdActivo();
     private:
         string idTran;
         string idActivo;
