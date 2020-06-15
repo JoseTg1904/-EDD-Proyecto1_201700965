@@ -10,6 +10,7 @@ class Usuario{
         Usuario(string,string,string);
         string getUsuario();
         string getContra();
+        AVL* getAVL();
     private:
         string nombre;
         string usuario;

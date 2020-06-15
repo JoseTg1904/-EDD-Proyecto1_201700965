@@ -18,3 +18,7 @@ string Usuario::getUsuario(){
 string Usuario::getContra(){
     return this->contra;
 }
+
+AVL* Usuario::getAVL(){
+    return this->avl;
+}

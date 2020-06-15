@@ -5,16 +5,17 @@
 using namespace std;
 
 class Transaccion{
-public:
-    Transaccion(string,string,string,string,string,string,string);
-private:
-    string idTran;
-    string idActivo;
-    string usuario;
-    string depa;
-    string empresa;
-    string fecha;
-    string tiempo;
+    public:
+        Transaccion(string, string, string, string, string, string, string);
+        string getIdTran();
+    private:
+        string idTran;
+        string idActivo;
+        string usuario;
+        string depa;
+        string empresa;
+        string fecha;
+        string tiempo;
 };
 
 #endif // TRANSACCION_H

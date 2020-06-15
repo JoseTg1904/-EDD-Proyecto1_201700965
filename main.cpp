@@ -1,8 +1,7 @@
 #include <iostream>
 #include "menus.h"
 
-int main()
-{
+int main(){
     Menus menu;
     menu.menuSesion();
     return 0;

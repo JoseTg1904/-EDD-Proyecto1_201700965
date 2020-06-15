@@ -3,14 +3,24 @@
 #include <stdio.h>
 #include <fstream>
 #include <cstdlib>
+#include <ctime>
 #include "menus.h"
 #include "Estructuras/matriz.h"
+#include "Estructuras/listadoblecircular.h"
+
 
 using namespace std;
 
+Menus::Menus(){
+    matriz = new Matriz();
+    identificador = new ListaDobleCircular();
+    transacciones = new ListaDobleCircular();
+}
+
 void Menus::menuSesion(){
-    limpiarPantalla();
-    string usu,contra,depa,empresa;
+
+limpiarPantalla();
+ string usu,contra,depa,empresa;
     cout << " Ingrese su usuario: ";
     cin >> usu;
     cout << " Ingrese su contraseña: ";
@@ -22,7 +32,7 @@ void Menus::menuSesion(){
         cin >>depa;
         cout <<" Ingrese su empresa: ";
         cin >>empresa;
-        Usuario *retorno = matriz->validarSesion(usu,contra,depa,empresa);
+        Usuario *retorno = this->matriz->validarSesion(usu,contra,depa,empresa);
         if(retorno != NULL){
             menuUsuario(retorno,depa,empresa);
         }else{
@@ -104,19 +114,15 @@ void Menus::crearUsuario(){
     cin.ignore();
     getline(cin,nombre);
     cout << " - Ingrese nombre del usuario: ";
-    cin.ignore();
     getline(cin,usu);
     cout << " - Ingrese contraseña del usuario: ";
-    cin.ignore();
     getline(cin,contra);
     cout << " - Ingrese departamento del usuario: ";
-    cin.ignore();
     getline(cin,depa);
     cout << " - Ingrese empresa del usuario: ";
-    cin.ignore();
     getline(cin,empresa);
-    cout<<nombre<<endl;
-    if(matriz->agregarUsuario(nombre,usu,contra,depa,empresa)){
+
+    if(this->matriz->agregarUsuario(nombre,usu,contra,depa,empresa)){
         cout<<"El usuario a sido creado con exito"<<endl;
     }else{
         cout<<"El nombre de usuario ingresado ya se encuentra dentro del sistema"<<endl;
@@ -132,7 +138,7 @@ void Menus::crearUsuario(){
 }
 
 void Menus::reporteMatriz(){
-    string dot = matriz->recorrerMatriz();
+    string dot = this->matriz->recorrerMatriz();
     ofstream archivo;
     archivo.open("/home/jose/Escritorio/matriz.dot",ios::out);
     archivo << dot;
@@ -143,13 +149,13 @@ void Menus::reporteMatriz(){
         int opcion;
         cout<<"Presione 0 para regresar al menu del administrador"<<endl;
         cin >> opcion;
-        if(opcion==0){
+        if(opcion == 0){
             menuAdmin();
         }
     }
 }
 
-void Menus::menuUsuario(Usuario *usuarioActual,string depa,string empresa){
+void Menus::menuUsuario(Usuario* usuarioActual, string depa, string empresa){
     limpiarPantalla();
     int opcion;
     cout << usuarioActual->getUsuario()<<": "<<endl;
@@ -170,10 +176,13 @@ void Menus::menuUsuario(Usuario *usuarioActual,string depa,string empresa){
         cin >> opcion;
         switch (opcion) {
             case 1:
+                crearActivo(usuarioActual,depa,empresa);
                 break;
             case 2:
+                eliminarActivo(usuarioActual,depa,empresa);
                 break;
             case 3:
+                modificarActivo(usuarioActual,depa,empresa);
                 break;
             case 4:
                 break;
@@ -190,3 +199,95 @@ void Menus::menuUsuario(Usuario *usuarioActual,string depa,string empresa){
         }
     }
 }
+
+void Menus::modificarActivo(Usuario* usuario, string depa,string empresa){
+    string retorno = usuario->getAVL()->retornarActivos(), id, descripcion;
+    cout << retorno;
+    cout << "Ingrese el ID del activo a modificar ";
+    cin.ignore();
+    getline(cin,id);
+    Activo* activo = usuario->getAVL()->modificar(id);
+    if(activo != NULL){
+        cout << "Ingrese la nueva descripcion del activo";
+        getline(cin,descripcion);
+        activo->setDescripcion(descripcion);
+        cout << "Activo modificado: ";
+        cout << "ID: " << activo->getID() << endl;
+        cout << "Nombre: " << activo->getNombre() << endl;
+        cout << "Descripcion: " << activo->getDescripcion() << endl;
+    }else{
+        cout << "El id del activo ingresado no existe en el sistema";
+    }
+}
+
+void Menus::eliminarActivo(Usuario* usuario, string depa, string empresa){
+    string retorno = usuario->getAVL()->retornarActivos(), id;
+    cout << retorno;
+    cout << "Ingrese el ID del activo a eliminar; ";
+    cin.ignore();
+    getline(cin,id);
+    if(usuario->getAVL()->eliminar(id)){
+        cout << "El activo se a eliminado exitosamente";
+    }else{
+        cout << "El id del activo ingresado no existe en el sistema";
+    }
+}
+
+void Menus::crearActivo(Usuario* usuario,string depa,string empresa){
+    string nombre,descripcion;
+    cout << "Ingrese el nombre del activo: ";
+    cin.ignore();
+    getline(cin,nombre);
+    cout << "Ingrese la descripcion del activo: ";
+    getline(cin,descripcion);
+    usuario->getAVL()->insertar(new Activo(obtenerID(),nombre,descripcion,false));
+    cout << "El activo a sido creado con exito!";
+}
+
+string Menus::obtenerID(){
+     string id;
+     while(true){
+        id = this->identificador->generarID();
+        if(this->identificador->verificarID(id) == false){
+            this->identificador->insertar(id);
+            break;
+        }
+      }
+     return id;
+}
+
+void Menus::rentarActivos(Usuario* usuario,string depa,string empresa){
+    ListaDobleCircular* temp = this->matriz->catalogoDeActivos();
+    string catalogo,id,tiempo;
+    NodoL* aux = temp->getCabeza();
+
+    do {
+        catalogo += "ID: "+aux->activo->getID()+" Nombre: "+aux->activo->getNombre()+" Descripcion: "
+                + aux->activo->getDescripcion()+"\n";
+        aux = aux->siguiente;
+    } while (aux!=temp->getCabeza());
+    aux = temp->getCabeza();
+    cout << catalogo;
+    cin.ignore();
+    cout << "Ingrese el id del activo a rentar: ";
+    getline(cin,id);
+    do {
+        if(aux->activo->getID() == id){
+            aux->activo->setRentado(true);
+            break;
+        }
+            aux = aux->siguiente;
+    } while (aux!=temp->getCabeza());
+    cout << "Ingrese el tiempo de renta del activo: ";
+    getline(cin,tiempo);
+
+    time_t t = time(0);
+    tm* calendario = localtime(&t);
+    string fecha = to_string(calendario->tm_mday) + "/" + to_string(calendario->tm_mon) + "/" + to_string(calendario->tm_year);
+    transacciones->insertar(new Transaccion(obtenerID(),aux->activo->getID(),
+                                            usuario->getUsuario(),depa,empresa,fecha,tiempo));
+
+
+
+}
+
