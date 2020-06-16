@@ -77,11 +77,41 @@ NodoL* ListaDobleCircular::getCabeza(){
 }
 
 void ListaDobleCircular::ordenarAscendente(){
-    NodoL* aux = this->cabeza;
+    ordenarAscendente(this->cabeza,1);
+}
+
+void ListaDobleCircular::ordenarAscendente(NodoL* temp, int tam){
+    if(tam <= this->tamanio){
+        NodoL* aux = this->cabeza;
+        do {
+            if(aux->transaccion->getIdTran() < temp->transaccion->getIdTran()){
+                Transaccion* transaccion = aux->transaccion;
+                aux->transaccion = temp->transaccion;
+                temp->transaccion = transaccion;
+            }
+            aux = aux->siguiente;
+        } while (aux!=this->cabeza);
+        ordenarAscendente(temp->siguiente,tam++);
+    }
 }
 
 void ListaDobleCircular::ordenarDescendente(){
-    NodoL* aux = this->cabeza;
+    ordenarAscendente(this->cabeza,1);
+}
+
+void ListaDobleCircular::ordenarDescendente(NodoL* temp, int tam){
+    if(tam <= this->tamanio){
+        NodoL* aux = this->cabeza;
+        do {
+            if(aux->transaccion->getIdTran() > temp->transaccion->getIdTran()){
+                Transaccion* transaccion = aux->transaccion;
+                aux->transaccion = temp->transaccion;
+                temp->transaccion = transaccion;
+            }
+            aux = aux->siguiente;
+        } while (aux!=this->cabeza);
+        ordenarDescendente(temp->siguiente,tam++);
+    }
 }
 
 bool ListaDobleCircular::verificarID(string iden){
@@ -129,28 +159,64 @@ string ListaDobleCircular::generarID(){
     return salida;
 }
 
-string ListaDobleCircular::eliminar(string id_activo){
-    string retorno;
+string* ListaDobleCircular::eliminar(string id_activo){
+    static string retorno[4];
     if(this->tamanio == 1){
         if(this->cabeza->transaccion->getIdActivo() == id_activo){
-            //retornar los datos para cambiar el estado del activo
+            retorno[0] = this->cabeza->transaccion->getUsuario();
+            retorno[1] = this->cabeza->transaccion->getIdTran();
+            retorno[2] = this->cabeza->transaccion->getDepa();
+            retorno[3] = this->cabeza->transaccion->getEmpresa();
             delete this->cabeza;
             delete this->cola;
             this->cabeza = this->cola = NULL;
+            this->tamanio--;
         }else{
-            retorno = "NULL";
-            return retorno;
+            retorno[0] = "NULL";
         }
-
     }else{
         NodoL* aux = this->cabeza;
+        bool band = false;
         do {
-            if(aux->transaccion->getIdActivo() == id_activo)
+            if(aux->transaccion->getIdActivo() == id_activo){
+                band = true;
                 break;
+            }
             aux = aux->siguiente;
-        } while (aux!=this->cabeza);
-
+        } while (aux != this->cabeza);
+            if(band){
+            NodoL* anterior = aux->anterior;
+            NodoL* siguiente = aux->siguiente;
+            aux->anterior->siguiente = siguiente;
+            aux->siguiente->anterior = anterior;
+            if(aux == cabeza){
+                cabeza = cabeza->siguiente;
+            }
+            if(aux == cola){
+                cola = cola->anterior;
+            }
+            retorno[0] = aux->transaccion->getUsuario();
+            retorno[1] = aux->transaccion->getIdTran();
+            retorno[2] = aux->transaccion->getDepa();
+            retorno[3] = aux->transaccion->getEmpresa();
+            delete aux;
+            this->tamanio--;
+            }else{
+                retorno[0] = "NULL";
+            }
     }
+    return retorno;
+}
 
+string ListaDobleCircular::transaccionesPropias(string usu, string depa, string empresa){
+    string retorno;
+    NodoL* aux = this->cabeza;
+    do {
+        if(aux->transaccion->getUsuario() == usu && aux->transaccion->getDepa() == depa &&
+                aux->transaccion->getEmpresa() == empresa){
+            retorno += "ID: " + aux->transaccion->getIdTran() +" Tiempo: "+aux->transaccion->getTiempo() + " dias\n";
+        }
+        aux = aux->siguiente;
+    } while (aux!=this->cabeza);
     return retorno;
 }

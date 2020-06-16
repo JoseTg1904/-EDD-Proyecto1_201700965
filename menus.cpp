@@ -188,6 +188,7 @@ void Menus::menuUsuario(Usuario* usuarioActual, string depa, string empresa){
                 rentarActivos(usuarioActual,depa,empresa);
                 break;
             case 5:
+                activosRentados(usuarioActual,depa,empresa);
                 break;
             case 6:
                 misActivosRentados(usuarioActual,depa,empresa);
@@ -291,7 +292,27 @@ void Menus::rentarActivos(Usuario* usuario,string depa,string empresa){
 }
 
 void Menus::activosRentados(Usuario* usuario, string depa, string empresa){
-
+    string retorno = this->transacciones->transaccionesPropias(usuario->getUsuario(), depa, empresa);
+    cout << retorno;
+    cout << "1. Devolver un activo";
+    cout << "0. regresar al menu de usuario";
+    string opcion,id;
+    string* activo;
+    getline(cin,opcion);
+    if(opcion == "1"){
+        cout << "Ingrese el ID del activo a regresar: ";
+        getline(cin,id);
+        activo = transacciones->eliminar(id);
+        if(activo[0]!="NULL"){
+            Usuario* usu = matriz->cambiarEstadoActivo(usuario->getUsuario(),depa,empresa);
+            Activo* active = usu->getAVL()->modificar(activo[1]);
+            active->setRentado(false);
+            cout << "Se a devuelto el activo";
+        }else{
+            cout << "EL id ingresado no se encuentra en el sistema";
+        }
+    }else{
+    }
 }
 
 void Menus::misActivosRentados(Usuario* usuario, string depa, string empresa){

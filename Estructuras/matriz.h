@@ -28,6 +28,9 @@ class Matriz{
         Usuario* validarSesion(string, string, string, string);
         string recorrerMatriz();
         ListaDobleCircular* catalogoDeActivos();
+        Usuario* cambiarEstadoActivo(string,string,string);
+        string activosDeEmpresa(string);
+        string activosDeDepartamento(string);
     private:
         NodoM* origen;
         bool verificarCabecerasHorizontales(string);

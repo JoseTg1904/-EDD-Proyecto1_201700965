@@ -22,16 +22,17 @@ class AVL{
         string retornarActivos();
         string retornarActivosRentados();
         ListaDobleCircular* devolverActivosDisponibles();
+        string retornarGrafo(string);
     private:
         NodoA* raiz;
         string activos;
         void eliminar(NodoA*, string);
         Activo* buscarMenor(NodoA*);
-        void generarGrafo(NodoA*);
         void calcularAltura(NodoA*);
         void llenarListaActivos(NodoA*);
         void activosDisponibles(ListaDobleCircular*, NodoA*);
         void activosRentados(NodoA*);
+        void generarGrafo(NodoA*);
 };
 
 #endif // AVL_H

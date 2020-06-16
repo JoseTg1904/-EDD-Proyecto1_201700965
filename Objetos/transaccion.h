@@ -9,6 +9,10 @@ class Transaccion{
         Transaccion(string, string, string, string, string, string, string);
         string getIdTran();
         string getIdActivo();
+        string getUsuario();
+        string getDepa();
+        string getEmpresa();
+        string getTiempo();
     private:
         string idTran;
         string idActivo;

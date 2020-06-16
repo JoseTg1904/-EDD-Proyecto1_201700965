@@ -23,3 +23,19 @@ string Transaccion::getIdTran(){
 string Transaccion::getIdActivo(){
     return this->idActivo;
 }
+
+string Transaccion::getUsuario(){
+    return this->usuario;
+}
+
+string Transaccion::getDepa(){
+    return this->depa;
+}
+
+string Transaccion::getEmpresa(){
+    return this->empresa;
+}
+
+string Transaccion::getTiempo(){
+    return this->tiempo;
+}

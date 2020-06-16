@@ -320,3 +320,74 @@ ListaDobleCircular* Matriz::catalogoDeActivos(){
     }
     return retorno;
 }
+
+Usuario* Matriz::cambiarEstadoActivo(string usu, string depa, string empresa){
+    if(verificarCabecerasHorizontales(depa) == false || verificarCabecerasVerticales(empresa) == false){
+        return NULL;
+    }
+    NodoM* columna = buscarDepartamento(depa);
+    NodoM* fila = buscarEmpresa(empresa);
+    int x = columna->posX, y = fila->posY;
+    bool band = false;
+
+    while(columna != NULL){
+        if(columna->posX == x && columna->posY == y){
+            band = true;
+            break;
+        }
+        columna = columna->abajo;
+    }
+
+    if(band){
+        band = false;
+        while(columna != NULL){
+            if(columna->usuario->getUsuario() == usu){
+                band = true;
+                break;
+            }
+            columna = columna->adentro;
+        }
+        if(band){
+            return columna->usuario;
+        }else{
+            return NULL;
+        }
+    }
+    return NULL;
+}
+
+string Matriz::activosDeEmpresa(string empresa){
+    NodoM* aux = buscarEmpresa(empresa);
+    NodoM* usuarios;
+    aux = aux->derecha;
+    string grafo = "digraph Arboles{\n";
+    while(aux != NULL){
+        usuarios = aux;
+        while (usuarios != NULL) {
+            grafo += usuarios->usuario->getAVL()->retornarGrafo(usuarios->usuario->getUsuario());
+            grafo += "\n";
+            usuarios = usuarios->adentro;
+        }
+        aux = aux->derecha;
+    }
+    grafo += "}";
+    return grafo;
+}
+
+string Matriz::activosDeDepartamento(string depa){
+    NodoM* aux = buscarDepartamento(depa);
+    NodoM* usuarios;
+    aux = aux->derecha;
+    string grafo = "digraph Arboles{\n";
+    while(aux != NULL){
+        usuarios = aux;
+        while (usuarios != NULL) {
+            grafo += usuarios->usuario->getAVL()->retornarGrafo(usuarios->usuario->getUsuario());
+            grafo += "\n";
+            usuarios = usuarios->adentro;
+        }
+        aux = aux->abajo;
+    }
+    grafo += "}";
+    return grafo;
+}

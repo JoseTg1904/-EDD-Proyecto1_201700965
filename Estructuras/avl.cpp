@@ -208,3 +208,42 @@ void AVL::activosRentados(NodoA* aux){
         activosRentados(aux->derecha);
     }
 }
+
+string AVL::retornarGrafo(string usuario){
+    activos = usuario + " [ label = \"Propietario: "+usuario+"\"]\n";
+    activos += usuario + " -> " + this->raiz->activo->getID();
+    activos += this->raiz->activo->getID() + "[ label = \"ID: "+ this->raiz->activo->getID() +
+            " Nombre: "+this->raiz->activo->getNombre() + " \"";
+    if(this->raiz->activo->getRentado()){
+        activos += "style = filled color = red ]\n";
+    }else{
+        activos += "style = filled color = green ]\n";
+    }
+    generarGrafo(this->raiz);
+    return activos;
+}
+
+void AVL::generarGrafo(NodoA* aux){
+    if(aux->izquierda != NULL){
+        activos += aux->izquierda->activo->getID() + "[ label = \"ID: "+ aux->izquierda->activo->getID() +
+                " Nombre: "+aux->izquierda->activo->getNombre() + " \"";
+        if(aux->izquierda->activo->getRentado()){
+            activos += "style = filled color = red ]\n";
+        }else{
+            activos += "style = filled color = green ]\n";
+        }
+        activos += aux->activo->getID() + " -> " + aux->izquierda->activo->getID()+"\n";
+        generarGrafo(aux->izquierda);
+    }
+    if(aux->derecha !=NULL){
+        activos += aux->derecha->activo->getID() + "[ label = \"ID: "+ aux->derecha->activo->getID() +
+                " Nombre: "+aux->derecha->activo->getNombre() + " \"";
+        if(aux->derecha->activo->getRentado()){
+            activos += "style = filled color = red ]\n";
+        }else{
+            activos += "style = filled color = green ]\n";
+        }
+        activos += aux->activo->getID() + " -> " + aux->derecha->activo->getID()+"\n";
+        generarGrafo(aux->derecha);
+    }
+}
