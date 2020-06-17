@@ -391,3 +391,38 @@ string Matriz::activosDeDepartamento(string depa){
     grafo += "}";
     return grafo;
 }
+
+Usuario* Matriz::devolverUsuario(string usu, string depa, string empresa){
+    if(verificarCabecerasHorizontales(depa) == false || verificarCabecerasVerticales(empresa) == false){
+        return NULL;
+    }
+    NodoM* columna = buscarDepartamento(depa);
+    NodoM* fila = buscarEmpresa(empresa);
+    int x = columna->posX, y = fila->posY;
+    bool band = false;
+
+    while(columna != NULL){
+        if(columna->posX == x && columna->posY == y){
+            band = true;
+            break;
+        }
+        columna = columna->abajo;
+    }
+
+    if(band){
+        band = false;
+        while(columna != NULL){
+            if(columna->usuario->getUsuario() == usu){
+                band = true;
+                break;
+            }
+            columna = columna->adentro;
+        }
+        if(band){
+            return columna->usuario;
+        }else{
+            return NULL;
+        }
+    }
+    return NULL;
+}

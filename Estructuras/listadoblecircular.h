@@ -33,6 +33,7 @@ class ListaDobleCircular{
         NodoL* getCabeza();
         string* eliminar(string);
         string transaccionesPropias(string, string, string);
+        string transaccionesGrafo(string, string, string, ListaDobleCircular*);
     private:
         NodoL* cabeza;
         NodoL* cola;

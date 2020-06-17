@@ -28,7 +28,8 @@ class Matriz{
         Usuario* validarSesion(string, string, string, string);
         string recorrerMatriz();
         ListaDobleCircular* catalogoDeActivos();
-        Usuario* cambiarEstadoActivo(string,string,string);
+        Usuario* cambiarEstadoActivo(string, string, string);
+        Usuario* devolverUsuario(string, string, string);
         string activosDeEmpresa(string);
         string activosDeDepartamento(string);
     private:

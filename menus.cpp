@@ -69,7 +69,6 @@ void Menus::menuAdmin(){
     cout << "| 5. Reporte transacciones                          |" << endl;
     cout << "| 6. Reporte activos de un usuario                  |" << endl;
     cout << "| 7. Activos rentados por un usuario                |" << endl;
-    cout << "| 8. Ordenar transacciones                          |" << endl;
     cout << "| 0. Regresar al inicio de sesion                   |" << endl;
     cout << "|                                                   |" << endl;
     cout << "-----------------------------------------------------" << endl;
@@ -88,16 +87,19 @@ void Menus::menuAdmin(){
                 reporteMatriz();
                 break;
             case 3:
+                activosPorDepartamento();
                 break;
             case 4:
+                activosPorEmpresa();
                 break;
             case 5:
+                reporteTransacciones();
                 break;
             case 6:
+                reporteActivosPorUsuario();
                 break;
             case 7:
-                break;
-            case 8:
+                reporteActivosRentadosPorUsuario();
                 break;
             default:
                 cout << "  La opcion ingresada no se encuentra en el menu" << endl;
@@ -318,4 +320,135 @@ void Menus::activosRentados(Usuario* usuario, string depa, string empresa){
 void Menus::misActivosRentados(Usuario* usuario, string depa, string empresa){
     string retorno = usuario->getAVL()->retornarActivosRentados();
     cout << retorno;
+}
+
+void Menus::activosPorDepartamento(){
+    string depa;
+    cout << "Ingrese el nombre del departamento: ";
+    cin.ignore();
+    getline(cin,depa);
+    string dot = this->matriz->activosDeDepartamento(depa);
+    ofstream archivo;
+    archivo.open("/home/jose/Escritorio/activosXDepa.dot",ios::out);
+    archivo << dot;
+    archivo.close();
+    system("dot /home/jose/Escritorio/activosXDepa.dot -Tpng -o /home/jose/Escritorio/activosXDepa.png");
+    cout<<"Se a generado el reporte con exito"<<endl;
+    while(true){
+        int opcion;
+        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cin >> opcion;
+        if(opcion == 0){
+            menuAdmin();
+        }
+    }
+}
+
+void Menus::activosPorEmpresa(){
+    string empresa;
+    cout << "Ingrese el nombre de la empresa: ";
+    cin.ignore();
+    getline(cin,empresa);
+    string dot = this->matriz->activosDeEmpresa(empresa);
+    ofstream archivo;
+    archivo.open("/home/jose/Escritorio/activosXEmpresa.dot",ios::out);
+    archivo << dot;
+    archivo.close();
+    system("dot /home/jose/Escritorio/activosXEmpresa.dot -Tpng -o /home/jose/Escritorio/activosXEmpresa.png");
+    cout<<"Se a generado el reporte con exito"<<endl;
+    while(true){
+        int opcion;
+        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cin >> opcion;
+        if(opcion == 0){
+            menuAdmin();
+        }
+    }
+}
+
+void Menus::reporteTransacciones(){
+    string opcion, dot;
+    ofstream archivo;
+    cout << "Ingrese la opcion de ordenamiento para las transacciones: ";
+    cout << "1. Ascendente";
+    cout << "2. Descendente";
+    cin.ignore();
+    getline(cin,opcion);
+    if(opcion == "1"){
+        this->transacciones->ordenarAscendente();
+        dot = this->transacciones->generarGrafo();
+        archivo.open("/home/jose/Escritorio/tranAsc.dot",ios::out);
+        archivo << dot;
+        archivo.close();
+        system("dot /home/jose/Escritorio/tranAsc.dot -Tpng -o /home/jose/Escritorio/tranAsc.png");
+    }else{
+        this->transacciones->ordenarDescendente();
+        dot = this->transacciones->generarGrafo();
+        archivo.open("/home/jose/Escritorio/tranDesc.dot",ios::out);
+        archivo << dot;
+        archivo.close();
+        system("dot /home/jose/Escritorio/tranDesc.dot -Tpng -o /home/jose/Escritorio/tranDesc.png");
+    }
+    cout<<"Se a generado el reporte con exito"<<endl;
+    while(true){
+        int opcion;
+        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cin >> opcion;
+        if(opcion == 0){
+            menuAdmin();
+        }
+    }
+}
+
+void Menus::reporteActivosPorUsuario(){
+    string usu, depa, empresa;
+    cout << "Ingrese el nombre del usuario: ";
+    cin.ignore();
+    getline(cin,usu);
+    cout << "Ingrese el departamento del usuario: ";
+    getline(cin,depa);
+    cout << "Ingrese la empresa del usuario: ";
+    getline(cin,empresa);
+    Usuario* usuario = this->matriz->devolverUsuario(usu,depa,empresa);
+    string dot = usuario->getAVL()->retornarGrafo(usu);
+    ofstream archivo;
+    archivo.open("/home/jose/Escritorio/activosXUsuario.dot",ios::out);
+    archivo << dot;
+    archivo.close();
+    system("dot /home/jose/Escritorio/activosXUsuario.dot -Tpng -o /home/jose/Escritorio/activosXUsuario.png");
+    cout<<"Se a generado el reporte con exito"<<endl;
+    while(true){
+        int opcion;
+        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cin >> opcion;
+        if(opcion == 0){
+            menuAdmin();
+        }
+    }
+}
+
+void Menus::reporteActivosRentadosPorUsuario(){
+    string usu, depa, empresa;
+    cout << "Ingrese el nombre del usuario: ";
+    cin.ignore();
+    getline(cin,usu);
+    cout << "Ingrese el departamento del usuario: ";
+    getline(cin,depa);
+    cout << "Ingrese la empresa del usuario: ";
+    getline(cin,empresa);
+    string dot = this->transacciones->transaccionesGrafo(usu, depa, empresa,this->transacciones);
+    ofstream archivo;
+    archivo.open("/home/jose/Escritorio/activosRenXUsuario.dot",ios::out);
+    archivo << dot;
+    archivo.close();
+    system("dot /home/jose/Escritorio/activosRnXUsuario.dot -Tpng -o /home/jose/Escritorio/activosRenXUsuario.png");
+    cout<<"Se a generado el reporte con exito"<<endl;
+    while(true){
+        int opcion;
+        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cin >> opcion;
+        if(opcion == 0){
+            menuAdmin();
+        }
+    }
 }

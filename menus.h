@@ -24,6 +24,11 @@ class Menus{
         void rentarActivos(Usuario*, string, string);
         void activosRentados(Usuario*, string, string);
         void misActivosRentados(Usuario*, string, string);
+        void activosPorDepartamento();
+        void activosPorEmpresa();
+        void reporteTransacciones();
+        void reporteActivosPorUsuario();
+        void reporteActivosRentadosPorUsuario();
         string obtenerID();
 };
 

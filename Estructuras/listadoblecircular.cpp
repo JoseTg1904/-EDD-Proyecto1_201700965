@@ -134,14 +134,14 @@ string ListaDobleCircular::generarGrafo(){
     string dot = "digraph Lista_Doble{\n";
 
     do {
-        dot += "\"" + aux->cadena + "\"" + " [ label = \"" + aux->cadena/*transaccion->getIdTran()*/ + "\" ]\n";
-        dot += "\""+aux->cadena + "\"" + " -> " + "\""+aux->siguiente->cadena+ "\"" + "\n";
+        dot += "\"" + aux->transaccion->getIdTran() + "\"" + " [ label = \"" + aux->transaccion->getIdTran() + "\" ]\n";
+        dot += "\""+aux->transaccion->getIdTran() + "\"" + " -> " + "\""+aux->siguiente->transaccion->getIdTran()+ "\"" + "\n";
         aux = aux->siguiente;
     } while (aux != this->cabeza);
     aux = this->cabeza;
 
     do { 
-        dot += "\""+aux->cadena+"\"" + " -> " + "\""+aux->anterior->cadena+"\"" + "\n";
+        dot += "\""+aux->transaccion->getIdTran()+"\"" + " -> " + "\""+aux->anterior->transaccion->getIdTran()+"\"" + "\n";
         aux = aux->anterior;
     } while (aux != this->cabeza);
 
@@ -219,4 +219,16 @@ string ListaDobleCircular::transaccionesPropias(string usu, string depa, string 
         aux = aux->siguiente;
     } while (aux!=this->cabeza);
     return retorno;
+}
+
+string ListaDobleCircular::transaccionesGrafo(string usu, string depa, string empresa, ListaDobleCircular* lista){
+    ListaDobleCircular* auxLista = new ListaDobleCircular();
+    NodoL* auxNodo = lista->getCabeza();
+    do{
+        if(auxNodo->transaccion->getUsuario() == usu && auxNodo->transaccion->getDepa() == depa && auxNodo->transaccion->getEmpresa() == empresa){
+            auxLista->insertar(auxNodo->transaccion);
+        }
+        auxNodo = auxNodo->siguiente;
+    }while(auxNodo != lista->getCabeza());
+    return auxLista->generarGrafo();
 }
