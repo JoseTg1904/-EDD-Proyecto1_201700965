@@ -77,20 +77,28 @@ void Matriz::crearCabeceraVertical(string empresa){
     }
 }
 
-void Matriz::recorrerDepartamentos(){
+string Matriz::recorrerDepartamentos(){
+    string retorno = "Departamentos disponibles:\n";
     NodoM* aux = this->origen;
     while(aux != NULL){
-        cout<< aux->nombre<<endl;
+        if(aux->nombre != "Origen"){
+            retorno += aux->nombre + "\n";
+        }
         aux = aux->derecha;
     }
+    return retorno;
 }
 
-void Matriz::recorrerEmpresas(){
+string Matriz::recorrerEmpresas(){
+    string retorno = "Empresas disponibles:\n";
     NodoM* aux = this->origen;
     while(aux != NULL){
-        cout << aux->nombre<<endl;
+        if(aux->nombre != "Origen"){
+            retorno += aux->nombre + "\n";
+        }
         aux = aux->abajo;
     }
+    return retorno;
 }
 
 NodoM* Matriz::buscarDepartamento(string depa){
@@ -300,19 +308,15 @@ Usuario* Matriz::validarSesion(string usu, string contra, string depa, string em
     return NULL;
 }
 
-ListaDobleCircular* Matriz::catalogoDeActivos(){
+string Matriz::catalogoDeActivos(){
     NodoM* fila = this->origen;
     NodoM* columna = this->origen;
-    ListaDobleCircular* retorno = new ListaDobleCircular();
-
+    string retorno = "Activos disponibles:\n";
     while(fila != NULL){
         while(columna != NULL){
-            ListaDobleCircular* temp = columna->usuario->getAVL()->devolverActivosDisponibles();
-            NodoL* aux = temp->getCabeza();
-            do {
-                retorno->insertar(aux->activo);
-                aux = aux->siguiente;
-            } while (aux != temp->getCabeza());
+            if(columna->nombre=="Listado"){
+                retorno += columna->usuario->getAVL()->devolverActivosDisponibles();
+            }
             columna = columna->derecha;
         }
         fila = fila->abajo;
@@ -359,16 +363,18 @@ Usuario* Matriz::cambiarEstadoActivo(string usu, string depa, string empresa){
 string Matriz::activosDeEmpresa(string empresa){
     NodoM* aux = buscarEmpresa(empresa);
     NodoM* usuarios;
+    NodoM* aux1 = this->origen->derecha;
     aux = aux->derecha;
     string grafo = "digraph Arboles{\n";
-    while(aux != NULL){
+    while(aux != NULL && aux1 != NULL){
         usuarios = aux;
         while (usuarios != NULL) {
-            grafo += usuarios->usuario->getAVL()->retornarGrafo(usuarios->usuario->getUsuario());
+            grafo += usuarios->usuario->getAVL()->retornarGrafo(usuarios->usuario->getUsuario(), aux1->nombre, empresa);
             grafo += "\n";
             usuarios = usuarios->adentro;
         }
         aux = aux->derecha;
+        aux1 = aux1->derecha;
     }
     grafo += "}";
     return grafo;
@@ -377,16 +383,19 @@ string Matriz::activosDeEmpresa(string empresa){
 string Matriz::activosDeDepartamento(string depa){
     NodoM* aux = buscarDepartamento(depa);
     NodoM* usuarios;
-    aux = aux->derecha;
+    NodoM* aux1 = this->origen->abajo;
+    aux = aux->abajo;
     string grafo = "digraph Arboles{\n";
-    while(aux != NULL){
+    while(aux != NULL && aux1 != NULL){
         usuarios = aux;
         while (usuarios != NULL) {
-            grafo += usuarios->usuario->getAVL()->retornarGrafo(usuarios->usuario->getUsuario());
+            grafo += usuarios->usuario->getAVL()->retornarGrafo(usuarios->usuario->getUsuario(), depa,
+                                                                aux1->nombre);
             grafo += "\n";
             usuarios = usuarios->adentro;
         }
         aux = aux->abajo;
+        aux1 = aux1->abajo;
     }
     grafo += "}";
     return grafo;
@@ -425,4 +434,30 @@ Usuario* Matriz::devolverUsuario(string usu, string depa, string empresa){
         }
     }
     return NULL;
+}
+
+Activo* Matriz::buscarActivo(string id_activo){
+    NodoM* fila = this->origen;
+    NodoM* columna = this->origen;
+    Activo* retorno = NULL;
+    bool band = false;
+
+    while(fila != NULL){
+        while(columna != NULL){
+            if(columna->nombre=="Listado"){
+                retorno = columna->usuario->getAVL()->modificar(id_activo);
+                if(retorno !=NULL){
+                    band = true;
+                    break;
+                }
+            }
+            columna = columna->derecha;
+        }
+        if(band){
+            break;
+        }
+        fila = fila->abajo;
+        columna = fila;
+    }
+    return retorno;
 }

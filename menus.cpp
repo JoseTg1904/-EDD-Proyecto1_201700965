@@ -7,6 +7,7 @@
 #include "menus.h"
 #include "Estructuras/matriz.h"
 #include "Estructuras/listadoblecircular.h"
+#include "Estructuras/avl.h"
 
 
 using namespace std;
@@ -18,28 +19,27 @@ Menus::Menus(){
 }
 
 void Menus::menuSesion(){
-
-limpiarPantalla();
- string usu,contra,depa,empresa;
-    cout << " Ingrese su usuario: ";
+    limpiarPantalla();
+    string usu,contra,depa,empresa;
+    cout << "Ingrese su usuario: ";
     cin >> usu;
-    cout << " Ingrese su contraseña: ";
+    cout << "Ingrese su contraseña: ";
     cin >> contra;
     if(usu == "admin" && contra == "admin"){
         menuAdmin();
     }else{
-        cout <<" Ingrese su departamento: ";
-        cin >>depa;
-        cout <<" Ingrese su empresa: ";
-        cin >>empresa;
-        Usuario *retorno = this->matriz->validarSesion(usu,contra,depa,empresa);
+        cout << "Ingrese su departamento: ";
+        cin >> depa;
+        cout << "Ingrese su empresa: ";
+        cin >> empresa;
+        Usuario *retorno = this->matriz->validarSesion(usu, contra, depa, empresa);
         if(retorno != NULL){
-            menuUsuario(retorno,depa,empresa);
+            menuUsuario(retorno, depa, empresa);
         }else{
-            cout<<"Sus datos no se encuentran en el sistema"<<endl;
+            cout << endl << "Sus datos no se encuentran en el sistema" << endl;
             while(true){
                 int opcion;
-                cout<<"Presione 0 para volver a intentar"<<endl;
+                cout << "Presione 0 para volver a intentar" << endl;
                 cin >> opcion;
                 if(opcion == 0){
                     menuSesion();
@@ -72,9 +72,8 @@ void Menus::menuAdmin(){
     cout << "| 0. Regresar al inicio de sesion                   |" << endl;
     cout << "|                                                   |" << endl;
     cout << "-----------------------------------------------------" << endl;
-
     while(true){
-        cout << " Ingrese el numero de la opcion a realizar: ";
+        cout << "Ingrese el numero de la opcion a realizar: ";
         cin >> opcion;
         switch (opcion) {
             case 0:
@@ -102,7 +101,8 @@ void Menus::menuAdmin(){
                 reporteActivosRentadosPorUsuario();
                 break;
             default:
-                cout << "  La opcion ingresada no se encuentra en el menu" << endl;
+                cout << endl << "La opcion ingresada no se encuentra en el menu" << endl;
+                cout << "Pruebe nuevamente" << endl << endl;
                 break;
         }
     }
@@ -110,28 +110,28 @@ void Menus::menuAdmin(){
 
 void Menus::crearUsuario(){
     limpiarPantalla();
-    string usu,contra,depa,empresa,nombre;
+    string usu, contra, depa, empresa, nombre;
     cout << "Ingrese los datos del usuario a crear" << endl;
     cout << " - Ingrese el nombre completo de usuario: ";
     cin.ignore();
-    getline(cin,nombre);
+    getline(cin, nombre);
     cout << " - Ingrese nombre del usuario: ";
-    getline(cin,usu);
+    getline(cin, usu);
     cout << " - Ingrese contraseña del usuario: ";
-    getline(cin,contra);
+    getline(cin, contra);
     cout << " - Ingrese departamento del usuario: ";
-    getline(cin,depa);
+    getline(cin, depa);
     cout << " - Ingrese empresa del usuario: ";
-    getline(cin,empresa);
+    getline(cin, empresa);
 
-    if(this->matriz->agregarUsuario(nombre,usu,contra,depa,empresa)){
-        cout<<"El usuario a sido creado con exito"<<endl;
+    if(this->matriz->agregarUsuario(nombre, usu, contra, depa, empresa)){
+        cout << endl << "El usuario a sido creado con exito" << endl;
     }else{
-        cout<<"El nombre de usuario ingresado ya se encuentra dentro del sistema"<<endl;
+        cout << endl << "El nombre de usuario ingresado ya se encuentra dentro del sistema" << endl;
     }
     while(true){
         int opcion;
-        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cout << endl << "Presione 0 para regresar al menu del administrador" << endl;
         cin >> opcion;
         if(opcion == 0){
             menuAdmin();
@@ -146,10 +146,10 @@ void Menus::reporteMatriz(){
     archivo << dot;
     archivo.close();
     system("dot /home/jose/Escritorio/matriz.dot -Tpng -o /home/jose/Escritorio/matriz.png");
-    cout<<"Se a generado el reporte con exito"<<endl;
+    cout << endl << "Se a generado el reporte con exito" << endl;
     while(true){
         int opcion;
-        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cout << endl << "Presione 0 para regresar al menu del administrador" << endl;
         cin >> opcion;
         if(opcion == 0){
             menuAdmin();
@@ -160,7 +160,7 @@ void Menus::reporteMatriz(){
 void Menus::menuUsuario(Usuario* usuarioActual, string depa, string empresa){
     limpiarPantalla();
     int opcion;
-    cout << usuarioActual->getUsuario()<<": "<<endl;
+    cout << usuarioActual->getUsuario() << ": " << endl;
     cout << "-------Menu Usuario--------" << endl;
     cout << "|                         |" << endl;
     cout << "| 1. Agregar activo       |" << endl;
@@ -174,79 +174,111 @@ void Menus::menuUsuario(Usuario* usuarioActual, string depa, string empresa){
     cout << "---------------------------" << endl;
 
     while(true){
-        cout << " Ingrese el numero de la opcion a realizar: ";
+        cout << "Ingrese el numero de la opcion a realizar: ";
         cin >> opcion;
         switch (opcion) {
             case 1:
-                crearActivo(usuarioActual,depa,empresa);
+                crearActivo(usuarioActual, depa, empresa);
                 break;
             case 2:
-                eliminarActivo(usuarioActual,depa,empresa);
+                eliminarActivo(usuarioActual, depa, empresa);
                 break;
             case 3:
-                modificarActivo(usuarioActual,depa,empresa);
+                modificarActivo(usuarioActual, depa, empresa);
                 break;
             case 4:
-                rentarActivos(usuarioActual,depa,empresa);
+                rentarActivos(usuarioActual, depa, empresa);
                 break;
             case 5:
-                activosRentados(usuarioActual,depa,empresa);
+                activosRentados(usuarioActual, depa, empresa);
                 break;
             case 6:
-                misActivosRentados(usuarioActual,depa,empresa);
+                misActivosRentados(usuarioActual, depa, empresa);
                 break;
             case 7:
                 menuSesion();
                 break;
             default:
-                cout << "  La opcion ingresada no se encuentra en el menu" << endl;
+                cout << endl << "La opcion ingresada no se encuentra en el menu" << endl << endl;
                 break;
         }
     }
 }
 
-void Menus::modificarActivo(Usuario* usuario, string depa,string empresa){
+void Menus::modificarActivo(Usuario* usuario, string depa, string empresa){
+    limpiarPantalla();
     string retorno = usuario->getAVL()->retornarActivos(), id, descripcion;
     cout << retorno;
-    cout << "Ingrese el ID del activo a modificar ";
+    cout << endl << "Ingrese el ID del activo a modificar: ";
     cin.ignore();
-    getline(cin,id);
+    getline(cin, id);
     Activo* activo = usuario->getAVL()->modificar(id);
     if(activo != NULL){
-        cout << "Ingrese la nueva descripcion del activo";
-        getline(cin,descripcion);
+        cout << endl << "Ingrese la nueva descripcion del activo: ";
+        getline(cin, descripcion);
         activo->setDescripcion(descripcion);
-        cout << "Activo modificado: ";
-        cout << "ID: " << activo->getID() << endl;
+        cout << endl << "Activo modificado: " << endl;
+        cout << endl << "ID: " << activo->getID() << endl;
         cout << "Nombre: " << activo->getNombre() << endl;
         cout << "Descripcion: " << activo->getDescripcion() << endl;
     }else{
-        cout << "El id del activo ingresado no existe en el sistema";
+        cout << endl << "El ID del activo ingresado no existe en el sistema" << endl;
+    }
+    while(true){
+        int opcion;
+        cout << endl << "Presione 0 para regresar al menu usuario" << endl;
+        cin >> opcion;
+        if(opcion == 0){
+            menuUsuario(usuario, depa, empresa);
+        }
     }
 }
 
 void Menus::eliminarActivo(Usuario* usuario, string depa, string empresa){
+    limpiarPantalla();
+    Activo* activo = NULL;
     string retorno = usuario->getAVL()->retornarActivos(), id;
     cout << retorno;
-    cout << "Ingrese el ID del activo a eliminar; ";
+    cout << endl << "Ingrese el ID del activo a eliminar: ";
     cin.ignore();
-    getline(cin,id);
-    if(usuario->getAVL()->eliminar(id)){
-        cout << "El activo se a eliminado exitosamente";
+    getline(cin, id);
+    activo = usuario->getAVL()->eliminar(id);
+    if(activo != NULL){
+        cout << endl << "El activo se a eliminado exitosamente" << endl;
+        cout << endl << "ID: " << activo->getID() << endl;
+        cout << "Nombre: " << activo->getNombre() << endl;
+        cout << "Descripcion: " << activo->getDescripcion() << endl;
     }else{
-        cout << "El id del activo ingresado no existe en el sistema";
+        cout << endl << "El id del activo ingresado no existe en el sistema" << endl;
+    }
+    while(true){
+        int opcion;
+        cout << endl << "Presione 0 para regresar al menu usuario" << endl;
+        cin >> opcion;
+        if(opcion == 0){
+            menuUsuario(usuario, depa, empresa);
+        }
     }
 }
 
-void Menus::crearActivo(Usuario* usuario,string depa,string empresa){
-    string nombre,descripcion;
+void Menus::crearActivo(Usuario* usuario, string depa, string empresa){
+    limpiarPantalla();
+    string nombre, descripcion;
     cout << "Ingrese el nombre del activo: ";
     cin.ignore();
-    getline(cin,nombre);
+    getline(cin, nombre);
     cout << "Ingrese la descripcion del activo: ";
-    getline(cin,descripcion);
-    usuario->getAVL()->insertar(new Activo(obtenerID(),nombre,descripcion,false));
-    cout << "El activo a sido creado con exito!";
+    getline(cin, descripcion);
+    usuario->getAVL()->insertar(new Activo(obtenerID(), nombre, descripcion, false));
+    cout << endl << "El activo a sido creado con exito!" << endl;
+    while(true){
+        int opcion;
+        cout << endl << "Presione 0 para regresar al menu usuario" << endl;
+        cin >> opcion;
+        if(opcion == 0){
+            menuUsuario(usuario, depa, empresa);
+        }
+    }
 }
 
 string Menus::obtenerID(){
@@ -262,69 +294,91 @@ string Menus::obtenerID(){
 }
 
 void Menus::rentarActivos(Usuario* usuario,string depa,string empresa){
-    ListaDobleCircular* temp = this->matriz->catalogoDeActivos();
-    string catalogo,id,tiempo;
-    NodoL* aux = temp->getCabeza();
-
-    do {
-        catalogo += "ID: "+aux->activo->getID()+" Nombre: "+aux->activo->getNombre()+" Descripcion: "
-                + aux->activo->getDescripcion()+"\n";
-        aux = aux->siguiente;
-    } while (aux!=temp->getCabeza());
-    aux = temp->getCabeza();
-    cout << catalogo;
+    limpiarPantalla();
+    cout << this->matriz->catalogoDeActivos();
+    string id, tiempo;
     cin.ignore();
-    cout << "Ingrese el id del activo a rentar: ";
-    getline(cin,id);
-    do {
-        if(aux->activo->getID() == id){
-            aux->activo->setRentado(true);
-            break;
+    cout << endl << "Ingrese el id del activo a rentar: ";
+    getline(cin, id);
+    Activo* activo = this->matriz->buscarActivo(id);
+    if(activo!=NULL){
+        activo->setRentado(true);
+        cout << "Ingrese el tiempo de renta del activo: ";
+        getline(cin,tiempo);
+        time_t t = time(0);
+        tm* calendario = localtime(&t);
+        string fecha = to_string(calendario->tm_mday) + "/" + to_string(calendario->tm_mon) + "/" + to_string(calendario->tm_year);
+        this->transacciones->insertar(new Transaccion(obtenerID(),activo->getID(), usuario->getUsuario(), depa, empresa, fecha, tiempo, activo));
+        cout << "Se a rentado el activo con exito"<<endl;
+    }else{
+        cout << endl << "El id ingresado no se encuentra en el sistema"<<endl;
+    }
+    while(true){
+        int opcion;
+        cout << endl << "Presione 0 para regresar al menu usuario" << endl;
+        cin >> opcion;
+        if(opcion == 0){
+            menuUsuario(usuario, depa, empresa);
         }
-            aux = aux->siguiente;
-    } while (aux!=temp->getCabeza());
-    cout << "Ingrese el tiempo de renta del activo: ";
-    getline(cin,tiempo);
-
-    time_t t = time(0);
-    tm* calendario = localtime(&t);
-    string fecha = to_string(calendario->tm_mday) + "/" + to_string(calendario->tm_mon) + "/" + to_string(calendario->tm_year);
-    transacciones->insertar(new Transaccion(obtenerID(),aux->activo->getID(),
-                                            usuario->getUsuario(),depa,empresa,fecha,tiempo));
+    }
 }
 
 void Menus::activosRentados(Usuario* usuario, string depa, string empresa){
+    limpiarPantalla();
     string retorno = this->transacciones->transaccionesPropias(usuario->getUsuario(), depa, empresa);
+    cout << "Activos que e rentado: " << endl;
     cout << retorno;
-    cout << "1. Devolver un activo";
-    cout << "0. regresar al menu de usuario";
+    cout << endl << "1. Devolver un activo" << endl;
+    cout << "0. regresar al menu de usuario" << endl;
+    cout << "Presione una de las opciones para ser realizada: ";
     string opcion,id;
-    string* activo;
-    getline(cin,opcion);
+    Activo* activo;
+    cin.ignore();
+    getline(cin, opcion);
     if(opcion == "1"){
-        cout << "Ingrese el ID del activo a regresar: ";
-        getline(cin,id);
-        activo = transacciones->eliminar(id);
-        if(activo[0]!="NULL"){
-            Usuario* usu = matriz->cambiarEstadoActivo(usuario->getUsuario(),depa,empresa);
-            Activo* active = usu->getAVL()->modificar(activo[1]);
-            active->setRentado(false);
-            cout << "Se a devuelto el activo";
+        cout << endl << "Ingrese el ID del activo a regresar: ";
+        getline(cin, id);
+        activo = transacciones->devolverActivo(id);
+        if(activo != NULL){
+            activo->setRentado(false);
+            cout << endl << "Se a devuelto el activo:" << endl;
+            cout << "ID: " << activo->getID() << endl;
+            cout << "Nombre: " << activo->getNombre() << endl;
+            cout << "Descricpion: " << activo->getDescripcion() << endl;
         }else{
             cout << "EL id ingresado no se encuentra en el sistema";
         }
+        while(true){
+            int opcion;
+            cout << endl << "Presione 0 para regresar al menu usuario" << endl;
+            cin >> opcion;
+            if(opcion == 0){
+                menuUsuario(usuario, depa, empresa);
+            }
+        }
     }else{
+        menuUsuario(usuario, depa, empresa);
     }
 }
 
 void Menus::misActivosRentados(Usuario* usuario, string depa, string empresa){
+    limpiarPantalla();
     string retorno = usuario->getAVL()->retornarActivosRentados();
     cout << retorno;
+    while(true){
+        int opcion;
+        cout << endl << "Presione 0 para regresar al menu usuario" << endl;
+        cin >> opcion;
+        if(opcion == 0){
+            menuUsuario(usuario, depa, empresa);
+        }
+    }
 }
 
 void Menus::activosPorDepartamento(){
     string depa;
-    cout << "Ingrese el nombre del departamento: ";
+    cout << endl << this->matriz->recorrerDepartamentos();
+    cout << endl << "Ingrese el nombre del departamento: ";
     cin.ignore();
     getline(cin,depa);
     string dot = this->matriz->activosDeDepartamento(depa);
@@ -333,10 +387,10 @@ void Menus::activosPorDepartamento(){
     archivo << dot;
     archivo.close();
     system("dot /home/jose/Escritorio/activosXDepa.dot -Tpng -o /home/jose/Escritorio/activosXDepa.png");
-    cout<<"Se a generado el reporte con exito"<<endl;
+    cout << endl << "Se a generado el reporte con exito" << endl;
     while(true){
         int opcion;
-        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cout << endl << "Presione 0 para regresar al menu del administrador" << endl;
         cin >> opcion;
         if(opcion == 0){
             menuAdmin();
@@ -346,7 +400,8 @@ void Menus::activosPorDepartamento(){
 
 void Menus::activosPorEmpresa(){
     string empresa;
-    cout << "Ingrese el nombre de la empresa: ";
+    cout << this->matriz->recorrerEmpresas();
+    cout << endl << "Ingrese el nombre de la empresa: ";
     cin.ignore();
     getline(cin,empresa);
     string dot = this->matriz->activosDeEmpresa(empresa);
@@ -355,10 +410,10 @@ void Menus::activosPorEmpresa(){
     archivo << dot;
     archivo.close();
     system("dot /home/jose/Escritorio/activosXEmpresa.dot -Tpng -o /home/jose/Escritorio/activosXEmpresa.png");
-    cout<<"Se a generado el reporte con exito"<<endl;
+    cout<<endl<<"Se a generado el reporte con exito"<<endl;
     while(true){
         int opcion;
-        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cout<<endl<<"Presione 0 para regresar al menu del administrador"<<endl;
         cin >> opcion;
         if(opcion == 0){
             menuAdmin();
@@ -369,9 +424,9 @@ void Menus::activosPorEmpresa(){
 void Menus::reporteTransacciones(){
     string opcion, dot;
     ofstream archivo;
+    cout << "1. Ascendente" << endl;
+    cout << "2. Descendente" << endl;
     cout << "Ingrese la opcion de ordenamiento para las transacciones: ";
-    cout << "1. Ascendente";
-    cout << "2. Descendente";
     cin.ignore();
     getline(cin,opcion);
     if(opcion == "1"){
@@ -409,8 +464,8 @@ void Menus::reporteActivosPorUsuario(){
     getline(cin,depa);
     cout << "Ingrese la empresa del usuario: ";
     getline(cin,empresa);
-    Usuario* usuario = this->matriz->devolverUsuario(usu,depa,empresa);
-    string dot = usuario->getAVL()->retornarGrafo(usu);
+    Usuario* usuario = this->matriz->devolverUsuario(usu, depa, empresa);
+    string dot = usuario->getAVL()->retornarGrafo(usu, depa, empresa);
     ofstream archivo;
     archivo.open("/home/jose/Escritorio/activosXUsuario.dot",ios::out);
     archivo << dot;

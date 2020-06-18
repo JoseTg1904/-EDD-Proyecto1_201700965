@@ -5,7 +5,7 @@
 
 using namespace std;
 Transaccion::Transaccion(string idTran, string idActivo, string usuario, string depa, string empresa, string fecha,
-                         string tiempo){
+                         string tiempo, Activo* activo){
     this->idTran = idTran;
     this->idActivo = idActivo;
     this->usuario = usuario;
@@ -13,7 +13,7 @@ Transaccion::Transaccion(string idTran, string idActivo, string usuario, string 
     this->empresa = empresa;
     this->fecha = fecha;
     this->tiempo = tiempo;
-
+    this->activo = activo;
 }
 
 string Transaccion::getIdTran(){
@@ -38,4 +38,8 @@ string Transaccion::getEmpresa(){
 
 string Transaccion::getTiempo(){
     return this->tiempo;
+}
+
+Activo* Transaccion::getActivo(){
+    return this->activo;
 }

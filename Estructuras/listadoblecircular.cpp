@@ -129,19 +129,34 @@ bool ListaDobleCircular::verificarID(string iden){
     return band;
 }
 
+void ListaDobleCircular::recorrer(){
+    NodoL* aux = this->cabeza;
+    string catalogo;
+    do {
+        catalogo += "ID: "+aux->activo->getID()+" Nombre: "+aux->activo->getNombre()+" Descripcion: "
+                + aux->activo->getDescripcion()+"\n";
+        aux = aux->siguiente;
+    } while (aux != this->cabeza);
+    cout << catalogo;
+}
+
 string ListaDobleCircular::generarGrafo(){
     NodoL* aux = this->cabeza;
     string dot = "digraph Lista_Doble{\n";
-
     do {
-        dot += "\"" + aux->transaccion->getIdTran() + "\"" + " [ label = \"" + aux->transaccion->getIdTran() + "\" ]\n";
-        dot += "\""+aux->transaccion->getIdTran() + "\"" + " -> " + "\""+aux->siguiente->transaccion->getIdTran()+ "\"" + "\n";
+        if(aux->transaccion->getActivo()->getRentado()){
+            dot += "\"" + aux->transaccion->getIdTran() + "\"" + " [ label = \"" + aux->transaccion->getIdTran() + "\" style = filled color = red]\n";
+        }else{
+            dot += "\"" + aux->transaccion->getIdTran() + "\"" + " [ label = \"" + aux->transaccion->getIdTran() + "\" style = filled color = green]\n";
+        }
+
+        dot += "\"" + aux->transaccion->getIdTran() + "\"" + " -> " + "\"" + aux->siguiente->transaccion->getIdTran() + "\"" + "\n";
         aux = aux->siguiente;
     } while (aux != this->cabeza);
     aux = this->cabeza;
 
     do { 
-        dot += "\""+aux->transaccion->getIdTran()+"\"" + " -> " + "\""+aux->anterior->transaccion->getIdTran()+"\"" + "\n";
+        dot += "\"" + aux->transaccion->getIdTran() + "\"" + " -> " + "\"" + aux->anterior->transaccion->getIdTran() + "\"" + "\n";
         aux = aux->anterior;
     } while (aux != this->cabeza);
 
@@ -214,7 +229,8 @@ string ListaDobleCircular::transaccionesPropias(string usu, string depa, string 
     do {
         if(aux->transaccion->getUsuario() == usu && aux->transaccion->getDepa() == depa &&
                 aux->transaccion->getEmpresa() == empresa){
-            retorno += "ID: " + aux->transaccion->getIdTran() +" Tiempo: "+aux->transaccion->getTiempo() + " dias\n";
+            retorno += "ID: " + aux->transaccion->getActivo()->getID() + " Nombre: " + aux->transaccion->getActivo()->getNombre() +
+                    " Tiempo: "+aux->transaccion->getTiempo() + " dias\n";
         }
         aux = aux->siguiente;
     } while (aux!=this->cabeza);
@@ -231,4 +247,16 @@ string ListaDobleCircular::transaccionesGrafo(string usu, string depa, string em
         auxNodo = auxNodo->siguiente;
     }while(auxNodo != lista->getCabeza());
     return auxLista->generarGrafo();
+}
+
+Activo* ListaDobleCircular::devolverActivo(string id_activo){
+    NodoL* aux = this->cabeza;
+    Activo* retorno = NULL;
+    do {
+        if(aux->transaccion->getActivo()->getID() == id_activo){
+            retorno = aux->transaccion->getActivo();
+            break;
+        }
+    } while (aux != this->cabeza);
+    return retorno;
 }

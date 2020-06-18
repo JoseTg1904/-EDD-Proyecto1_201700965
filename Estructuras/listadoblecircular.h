@@ -34,6 +34,8 @@ class ListaDobleCircular{
         string* eliminar(string);
         string transaccionesPropias(string, string, string);
         string transaccionesGrafo(string, string, string, ListaDobleCircular*);
+        void recorrer();
+        Activo* devolverActivo(string);
     private:
         NodoL* cabeza;
         NodoL* cola;

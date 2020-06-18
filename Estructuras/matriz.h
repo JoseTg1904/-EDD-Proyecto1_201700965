@@ -27,11 +27,14 @@ class Matriz{
         bool verificarExistencia(string, string, string);
         Usuario* validarSesion(string, string, string, string);
         string recorrerMatriz();
-        ListaDobleCircular* catalogoDeActivos();
+        string catalogoDeActivos();
         Usuario* cambiarEstadoActivo(string, string, string);
         Usuario* devolverUsuario(string, string, string);
         string activosDeEmpresa(string);
         string activosDeDepartamento(string);
+        Activo* buscarActivo(string);
+        string recorrerDepartamentos();
+        string recorrerEmpresas();
     private:
         NodoM* origen;
         bool verificarCabecerasHorizontales(string);
@@ -40,8 +43,7 @@ class Matriz{
         void crearCabeceraVertical(string);
         NodoM* buscarDepartamento(string);
         NodoM* buscarEmpresa(string);
-        void recorrerDepartamentos();
-        void recorrerEmpresas();
+
 };
 
 #endif // MATRIZ_H
