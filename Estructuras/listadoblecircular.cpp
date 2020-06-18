@@ -81,6 +81,7 @@ void ListaDobleCircular::ordenarAscendente(){
 }
 
 void ListaDobleCircular::ordenarAscendente(NodoL* temp, int tam){
+    cout << "tamaño lista: "<<this->tamanio<<" tam: "<<tam<<endl;
     if(tam <= this->tamanio){
         NodoL* aux = this->cabeza;
         do {
@@ -91,7 +92,8 @@ void ListaDobleCircular::ordenarAscendente(NodoL* temp, int tam){
             }
             aux = aux->siguiente;
         } while (aux!=this->cabeza);
-        ordenarAscendente(temp->siguiente,tam++);
+        tam++;
+        ordenarAscendente(temp->siguiente,tam);
     }
 }
 
@@ -110,7 +112,8 @@ void ListaDobleCircular::ordenarDescendente(NodoL* temp, int tam){
             }
             aux = aux->siguiente;
         } while (aux!=this->cabeza);
-        ordenarDescendente(temp->siguiente,tam++);
+        tam++;
+        ordenarDescendente(temp->siguiente,tam);
     }
 }
 
@@ -129,23 +132,14 @@ bool ListaDobleCircular::verificarID(string iden){
     return band;
 }
 
-void ListaDobleCircular::recorrer(){
-    NodoL* aux = this->cabeza;
-    string catalogo;
-    do {
-        catalogo += "ID: "+aux->activo->getID()+" Nombre: "+aux->activo->getNombre()+" Descripcion: "
-                + aux->activo->getDescripcion()+"\n";
-        aux = aux->siguiente;
-    } while (aux != this->cabeza);
-    cout << catalogo;
-}
-
 string ListaDobleCircular::generarGrafo(){
     NodoL* aux = this->cabeza;
-    string dot = "digraph Lista_Doble{\n";
+    string dot = "digraph Lista_Doble{\nrankdir = LR";
     do {
         if(aux->transaccion->getActivo()->getRentado()){
-            dot += "\"" + aux->transaccion->getIdTran() + "\"" + " [ label = \"" + aux->transaccion->getIdTran() + "\" style = filled color = red]\n";
+            dot += "\"" + aux->transaccion->getIdTran() + "\"" + " [ label = \"ID: " + aux->transaccion->getIdTran() +
+                    "\nNombre: "+ aux->transaccion->getActivo()->getNombre() +
+                    "\nUsuario: "+aux->transaccion->getUsuario() + "\" style = filled color = red]\n";
         }else{
             dot += "\"" + aux->transaccion->getIdTran() + "\"" + " [ label = \"" + aux->transaccion->getIdTran() + "\" style = filled color = green]\n";
         }
@@ -172,55 +166,6 @@ string ListaDobleCircular::generarID(){
         salida += almacen[rand() % (almacen.length()-1)];
     }
     return salida;
-}
-
-string* ListaDobleCircular::eliminar(string id_activo){
-    static string retorno[4];
-    if(this->tamanio == 1){
-        if(this->cabeza->transaccion->getIdActivo() == id_activo){
-            retorno[0] = this->cabeza->transaccion->getUsuario();
-            retorno[1] = this->cabeza->transaccion->getIdTran();
-            retorno[2] = this->cabeza->transaccion->getDepa();
-            retorno[3] = this->cabeza->transaccion->getEmpresa();
-            delete this->cabeza;
-            delete this->cola;
-            this->cabeza = this->cola = NULL;
-            this->tamanio--;
-        }else{
-            retorno[0] = "NULL";
-        }
-    }else{
-        NodoL* aux = this->cabeza;
-        bool band = false;
-        do {
-            if(aux->transaccion->getIdActivo() == id_activo){
-                band = true;
-                break;
-            }
-            aux = aux->siguiente;
-        } while (aux != this->cabeza);
-            if(band){
-            NodoL* anterior = aux->anterior;
-            NodoL* siguiente = aux->siguiente;
-            aux->anterior->siguiente = siguiente;
-            aux->siguiente->anterior = anterior;
-            if(aux == cabeza){
-                cabeza = cabeza->siguiente;
-            }
-            if(aux == cola){
-                cola = cola->anterior;
-            }
-            retorno[0] = aux->transaccion->getUsuario();
-            retorno[1] = aux->transaccion->getIdTran();
-            retorno[2] = aux->transaccion->getDepa();
-            retorno[3] = aux->transaccion->getEmpresa();
-            delete aux;
-            this->tamanio--;
-            }else{
-                retorno[0] = "NULL";
-            }
-    }
-    return retorno;
 }
 
 string ListaDobleCircular::transaccionesPropias(string usu, string depa, string empresa){

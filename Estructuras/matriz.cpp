@@ -461,3 +461,23 @@ Activo* Matriz::buscarActivo(string id_activo){
     }
     return retorno;
 }
+
+string Matriz::usuariosMatriz(){
+    NodoM* fila = this->origen;
+    NodoM* columna = this->origen;
+    string retorno = "Usuarios disponibles:\n", depa, empresa;
+    while(fila != NULL){
+        depa = columna->nombre;
+        empresa = fila->nombre;
+        while(columna != NULL){
+            if(columna->nombre=="Listado"){
+                retorno += "Usuario: " + columna->usuario->getUsuario() + " Departamento: " + depa
+                        + " Empresa: " + empresa + "\n";
+            }
+            columna = columna->derecha;
+        }
+        fila = fila->abajo;
+        columna = fila;
+    }
+    return retorno;
+}

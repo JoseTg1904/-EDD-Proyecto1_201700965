@@ -35,6 +35,7 @@ class Matriz{
         Activo* buscarActivo(string);
         string recorrerDepartamentos();
         string recorrerEmpresas();
+        string usuariosMatriz();
     private:
         NodoM* origen;
         bool verificarCabecerasHorizontales(string);

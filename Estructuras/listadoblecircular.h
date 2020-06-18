@@ -16,7 +16,6 @@ struct NodoL{
     NodoL(NodoL*, NodoL*, Transaccion*);
     NodoL(NodoL*, NodoL*, string);
     NodoL(NodoL*, NodoL*, Activo*);
-
 };
 
 class ListaDobleCircular{
@@ -31,10 +30,8 @@ class ListaDobleCircular{
         void insertar(string);
         void insertar(Activo*);
         NodoL* getCabeza();
-        string* eliminar(string);
         string transaccionesPropias(string, string, string);
         string transaccionesGrafo(string, string, string, ListaDobleCircular*);
-        void recorrer();
         Activo* devolverActivo(string);
     private:
         NodoL* cabeza;

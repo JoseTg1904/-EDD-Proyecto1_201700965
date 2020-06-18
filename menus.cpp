@@ -308,7 +308,7 @@ void Menus::rentarActivos(Usuario* usuario,string depa,string empresa){
         time_t t = time(0);
         tm* calendario = localtime(&t);
         string fecha = to_string(calendario->tm_mday) + "/" + to_string(calendario->tm_mon) + "/" + to_string(calendario->tm_year);
-        this->transacciones->insertar(new Transaccion(obtenerID(),activo->getID(), usuario->getUsuario(), depa, empresa, fecha, tiempo, activo));
+        this->transacciones->insertar(new Transaccion(obtenerID(), activo->getID(), usuario->getUsuario(), depa, empresa, fecha, tiempo, activo));
         cout << "Se a rentado el activo con exito"<<endl;
     }else{
         cout << endl << "El id ingresado no se encuentra en el sistema"<<endl;
@@ -424,7 +424,7 @@ void Menus::activosPorEmpresa(){
 void Menus::reporteTransacciones(){
     string opcion, dot;
     ofstream archivo;
-    cout << "1. Ascendente" << endl;
+    cout << endl << "1. Ascendente" << endl;
     cout << "2. Descendente" << endl;
     cout << "Ingrese la opcion de ordenamiento para las transacciones: ";
     cin.ignore();
@@ -444,10 +444,10 @@ void Menus::reporteTransacciones(){
         archivo.close();
         system("dot /home/jose/Escritorio/tranDesc.dot -Tpng -o /home/jose/Escritorio/tranDesc.png");
     }
-    cout<<"Se a generado el reporte con exito"<<endl;
+    cout << endl << "Se a generado el reporte con exito" << endl;
     while(true){
         int opcion;
-        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cout << endl << "Presione 0 para regresar al menu del administrador" << endl;
         cin >> opcion;
         if(opcion == 0){
             menuAdmin();
@@ -456,8 +456,10 @@ void Menus::reporteTransacciones(){
 }
 
 void Menus::reporteActivosPorUsuario(){
+    limpiarPantalla();
     string usu, depa, empresa;
-    cout << "Ingrese el nombre del usuario: ";
+    cout << this->matriz->usuariosMatriz();
+    cout << endl << "Ingrese el nombre del usuario: ";
     cin.ignore();
     getline(cin,usu);
     cout << "Ingrese el departamento del usuario: ";
@@ -465,16 +467,18 @@ void Menus::reporteActivosPorUsuario(){
     cout << "Ingrese la empresa del usuario: ";
     getline(cin,empresa);
     Usuario* usuario = this->matriz->devolverUsuario(usu, depa, empresa);
-    string dot = usuario->getAVL()->retornarGrafo(usu, depa, empresa);
+    string dot = "digraph Arbol{\n";
+    dot += usuario->getAVL()->retornarGrafo(usu, depa, empresa);
+    dot += "}";
     ofstream archivo;
     archivo.open("/home/jose/Escritorio/activosXUsuario.dot",ios::out);
     archivo << dot;
     archivo.close();
     system("dot /home/jose/Escritorio/activosXUsuario.dot -Tpng -o /home/jose/Escritorio/activosXUsuario.png");
-    cout<<"Se a generado el reporte con exito"<<endl;
+    cout << endl << "Se a generado el reporte con exito" << endl;
     while(true){
         int opcion;
-        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cout << endl << "Presione 0 para regresar al menu del administrador" << endl;
         cin >> opcion;
         if(opcion == 0){
             menuAdmin();
@@ -483,8 +487,10 @@ void Menus::reporteActivosPorUsuario(){
 }
 
 void Menus::reporteActivosRentadosPorUsuario(){
+    limpiarPantalla();
     string usu, depa, empresa;
-    cout << "Ingrese el nombre del usuario: ";
+    cout << this->matriz->usuariosMatriz();
+    cout << endl << "Ingrese el nombre del usuario: ";
     cin.ignore();
     getline(cin,usu);
     cout << "Ingrese el departamento del usuario: ";
@@ -496,11 +502,11 @@ void Menus::reporteActivosRentadosPorUsuario(){
     archivo.open("/home/jose/Escritorio/activosRenXUsuario.dot",ios::out);
     archivo << dot;
     archivo.close();
-    system("dot /home/jose/Escritorio/activosRnXUsuario.dot -Tpng -o /home/jose/Escritorio/activosRenXUsuario.png");
-    cout<<"Se a generado el reporte con exito"<<endl;
+    system("dot /home/jose/Escritorio/activosRenXUsuario.dot -Tpng -o /home/jose/Escritorio/activosRenXUsuario.png");
+    cout << endl << "Se a generado el reporte con exito"<<endl;
     while(true){
         int opcion;
-        cout<<"Presione 0 para regresar al menu del administrador"<<endl;
+        cout << endl << "Presione 0 para regresar al menu del administrador"<<endl;
         cin >> opcion;
         if(opcion == 0){
             menuAdmin();
