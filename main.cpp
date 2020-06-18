@@ -2,7 +2,7 @@
 #include "menus.h"
 
 int main(){
-    Menus menu;
+    Menu menu;
     menu.menuSesion();
     return 0;
 }

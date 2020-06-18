@@ -5,10 +5,10 @@
 #include "Objetos/usuario.h"
 #include <iostream>
 
-class Menus{
+class Menu{
     public:
         void menuSesion();
-        Menus();
+        Menu();
     private:
         Matriz* matriz;
         ListaDobleCircular* identificador;

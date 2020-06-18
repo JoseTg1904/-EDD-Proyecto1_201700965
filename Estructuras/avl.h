@@ -18,7 +18,6 @@ class AVL{
     public:
         AVL();
         void insertar(Activo*);
-        void insertar(int);
         Activo* eliminar(string);
         Activo* modificar(string);
         string retornarActivos();
@@ -36,8 +35,6 @@ class AVL{
         void activosDisponibles(NodoA*);
         void activosRentados(NodoA*);
         void generarGrafo(NodoA*);
-        NodoA* rotacionSI(NodoA*, NodoA*);
-        NodoA* rotacionSD(NodoA*, NodoA*);
 };
 
 #endif // AVL_H

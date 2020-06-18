@@ -47,33 +47,6 @@ void AVL::insertar(Activo* activo){
     }
 }
 
-void AVL::insertar(int val){
-    if(raiz == NULL){
-        raiz = new NodoA(NULL, NULL, NULL, val, 0);
-    }else{
-        NodoA* aux = this->raiz;
-        while(true){
-            if(aux->valor > val){
-                if(aux->izquierda == NULL){
-                    aux->izquierda = new NodoA(NULL, NULL, aux, val, 0);
-                    calcularAltura(aux->izquierda);
-                    break;
-                }
-                aux = aux->izquierda;
-            }else if(aux->valor < val){
-                if(aux->derecha == NULL){
-                    aux->derecha = new NodoA(NULL, NULL, aux, val, 0);
-                    calcularAltura(aux->derecha);
-                    break;
-                }
-                aux = aux->derecha;
-            }else{
-                break;
-            }
-        }
-    }
-}
-
 void AVL::calcularAltura(NodoA* aux){
     int altura = 1, fe = 0;
     while(aux != NULL){
@@ -433,42 +406,3 @@ void AVL::generarGrafo(NodoA* aux){
         generarGrafo(aux->derecha);
     }
 }
-
-/*
-NodoA* AVL::rotacionSD(NodoA* actual, NodoA* anterior){
-    actual->izquierda = anterior->derecha;
-    anterior->derecha->padre = actual;
-    anterior->derecha = actual;
-    anterior->padre = actual->padre;
-    actual->padre = anterior;
-    actual->altura = actual->altura - 1;
-    //anterior = actual;
-    if(actual == this->raiz){
-        this->raiz = anterior;
-    }
-    return anterior;
-}
-
-NodoA* AVL::rotacionSI(NodoA* actual, NodoA* anterior){
-
-    cout << "actual: "<<actual->valor<<" anterior: "<<anterior->valor<<endl;
-    cout << "actual derecha: " << actual->derecha->valor<<endl;
-    actual->derecha = anterior->izquierda;
-    if(actual->derecha == NULL){
-     cout << "es nulo "<<endl;
-    }else{
-    cout << "actual derecha: " << actual->derecha->valor;
-    }
-    anterior->izquierda->padre = actual;
-    cout << "anterior izquierda padre: " << anterior->izquierda->padre->valor;
-    anterior->izquierda = actual;
-    anterior->padre = actual->padre;
-    actual->padre = anterior;
-    actual->altura = actual->altura - 1;
-    //anterior = actual;
-    if(actual == this->raiz){
-        this->raiz = anterior;
-    }
-    return anterior;
-}
-*/

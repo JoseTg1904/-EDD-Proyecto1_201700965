@@ -12,13 +12,13 @@
 
 using namespace std;
 
-Menus::Menus(){
+Menu::Menu(){
     matriz = new Matriz();
     identificador = new ListaDobleCircular();
     transacciones = new ListaDobleCircular();
 }
 
-void Menus::menuSesion(){
+void Menu::menuSesion(){
     limpiarPantalla();
     string usu,contra,depa,empresa;
     cout << "Ingrese su usuario: ";
@@ -49,7 +49,7 @@ void Menus::menuSesion(){
     }
 }
 
-void Menus::limpiarPantalla(){
+void Menu::limpiarPantalla(){
   #ifdef _WIN32
     system("cls");
   #else
@@ -57,7 +57,7 @@ void Menus::limpiarPantalla(){
   #endif
 }
 
-void Menus::menuAdmin(){
+void Menu::menuAdmin(){
     limpiarPantalla();
     int opcion;
     cout << "-----------------Menu Administrador------------------" << endl;
@@ -108,7 +108,7 @@ void Menus::menuAdmin(){
     }
 }
 
-void Menus::crearUsuario(){
+void Menu::crearUsuario(){
     limpiarPantalla();
     string usu, contra, depa, empresa, nombre;
     cout << "Ingrese los datos del usuario a crear" << endl;
@@ -139,7 +139,7 @@ void Menus::crearUsuario(){
     }
 }
 
-void Menus::reporteMatriz(){
+void Menu::reporteMatriz(){
     string dot = this->matriz->recorrerMatriz();
     ofstream archivo;
     archivo.open("/home/jose/Escritorio/matriz.dot",ios::out);
@@ -157,7 +157,7 @@ void Menus::reporteMatriz(){
     }
 }
 
-void Menus::menuUsuario(Usuario* usuarioActual, string depa, string empresa){
+void Menu::menuUsuario(Usuario* usuarioActual, string depa, string empresa){
     limpiarPantalla();
     int opcion;
     cout << usuarioActual->getUsuario() << ": " << endl;
@@ -205,7 +205,7 @@ void Menus::menuUsuario(Usuario* usuarioActual, string depa, string empresa){
     }
 }
 
-void Menus::modificarActivo(Usuario* usuario, string depa, string empresa){
+void Menu::modificarActivo(Usuario* usuario, string depa, string empresa){
     limpiarPantalla();
     string retorno = usuario->getAVL()->retornarActivos(), id, descripcion;
     cout << retorno;
@@ -234,7 +234,7 @@ void Menus::modificarActivo(Usuario* usuario, string depa, string empresa){
     }
 }
 
-void Menus::eliminarActivo(Usuario* usuario, string depa, string empresa){
+void Menu::eliminarActivo(Usuario* usuario, string depa, string empresa){
     limpiarPantalla();
     Activo* activo = NULL;
     string retorno = usuario->getAVL()->retornarActivos(), id;
@@ -261,7 +261,7 @@ void Menus::eliminarActivo(Usuario* usuario, string depa, string empresa){
     }
 }
 
-void Menus::crearActivo(Usuario* usuario, string depa, string empresa){
+void Menu::crearActivo(Usuario* usuario, string depa, string empresa){
     limpiarPantalla();
     string nombre, descripcion;
     cout << "Ingrese el nombre del activo: ";
@@ -281,7 +281,7 @@ void Menus::crearActivo(Usuario* usuario, string depa, string empresa){
     }
 }
 
-string Menus::obtenerID(){
+string Menu::obtenerID(){
      string id;
      while(true){
         id = this->identificador->generarID();
@@ -293,7 +293,7 @@ string Menus::obtenerID(){
      return id;
 }
 
-void Menus::rentarActivos(Usuario* usuario,string depa,string empresa){
+void Menu::rentarActivos(Usuario* usuario,string depa,string empresa){
     limpiarPantalla();
     cout << this->matriz->catalogoDeActivos();
     string id, tiempo;
@@ -323,7 +323,7 @@ void Menus::rentarActivos(Usuario* usuario,string depa,string empresa){
     }
 }
 
-void Menus::activosRentados(Usuario* usuario, string depa, string empresa){
+void Menu::activosRentados(Usuario* usuario, string depa, string empresa){
     limpiarPantalla();
     string retorno = this->transacciones->transaccionesPropias(usuario->getUsuario(), depa, empresa);
     cout << "Activos que e rentado: " << endl;
@@ -361,7 +361,7 @@ void Menus::activosRentados(Usuario* usuario, string depa, string empresa){
     }
 }
 
-void Menus::misActivosRentados(Usuario* usuario, string depa, string empresa){
+void Menu::misActivosRentados(Usuario* usuario, string depa, string empresa){
     limpiarPantalla();
     string retorno = usuario->getAVL()->retornarActivosRentados();
     cout << retorno;
@@ -375,7 +375,7 @@ void Menus::misActivosRentados(Usuario* usuario, string depa, string empresa){
     }
 }
 
-void Menus::activosPorDepartamento(){
+void Menu::activosPorDepartamento(){
     string depa;
     cout << endl << this->matriz->recorrerDepartamentos();
     cout << endl << "Ingrese el nombre del departamento: ";
@@ -398,7 +398,7 @@ void Menus::activosPorDepartamento(){
     }
 }
 
-void Menus::activosPorEmpresa(){
+void Menu::activosPorEmpresa(){
     string empresa;
     cout << this->matriz->recorrerEmpresas();
     cout << endl << "Ingrese el nombre de la empresa: ";
@@ -421,7 +421,7 @@ void Menus::activosPorEmpresa(){
     }
 }
 
-void Menus::reporteTransacciones(){
+void Menu::reporteTransacciones(){
     string opcion, dot;
     ofstream archivo;
     cout << endl << "1. Ascendente" << endl;
@@ -455,7 +455,7 @@ void Menus::reporteTransacciones(){
     }
 }
 
-void Menus::reporteActivosPorUsuario(){
+void Menu::reporteActivosPorUsuario(){
     limpiarPantalla();
     string usu, depa, empresa;
     cout << this->matriz->usuariosMatriz();
@@ -486,7 +486,7 @@ void Menus::reporteActivosPorUsuario(){
     }
 }
 
-void Menus::reporteActivosRentadosPorUsuario(){
+void Menu::reporteActivosRentadosPorUsuario(){
     limpiarPantalla();
     string usu, depa, empresa;
     cout << this->matriz->usuariosMatriz();
